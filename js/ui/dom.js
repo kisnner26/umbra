@@ -12,6 +12,9 @@ export function h(tag, props = {}, ...children) {
   return el;
 }
 
+/** como el.append pero ignorando false/null (un `cond && h(...)` no debe pintar la palabra "false"). */
+export const put = (el, ...children) => el.append(...children.flat(Infinity).filter((c) => c != null && c !== false));
+
 export const $ = (sel, root = document) => root.querySelector(sel);
 
 export function download(blob, name) {

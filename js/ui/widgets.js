@@ -1,4 +1,5 @@
 import { h, formatBytes } from './dom.js';
+import { t } from '../i18n.js';
 
 /** zona para soltar o elegir un archivo. */
 export function fileDrop({ label, accept, onFile }) {
@@ -14,9 +15,9 @@ export function fileDrop({ label, accept, onFile }) {
 }
 
 /** campo de clave con ojo para verla. */
-export function passField({ label = 'clave', onInput, hint }) {
-  const input = h('input', { type: 'password', autocomplete: 'off', spellcheck: false, placeholder: 'sin clave, solo se ofusca', onInput: () => onInput?.(input.value) });
-  const eye = h('button', { type: 'button', class: 'ghost', 'aria-label': 'mostrar u ocultar la clave', onClick: () => { input.type = input.type === 'password' ? 'text' : 'password'; } }, '👁');
+export function passField({ label = t('clave'), onInput, hint, placeholder = t('sin clave, solo se ofusca') }) {
+  const input = h('input', { type: 'password', autocomplete: 'off', spellcheck: false, placeholder, onInput: () => onInput?.(input.value) });
+  const eye = h('button', { type: 'button', class: 'ghost', 'aria-label': t('mostrar u ocultar la clave'), onClick: () => { input.type = input.type === 'password' ? 'text' : 'password'; } }, '👁');
   return h('div', { class: 'field' }, h('span', { class: 'label' }, label), h('div', { class: 'row' }, input, eye), hint && h('small', {}, hint));
 }
 
@@ -29,7 +30,7 @@ export function meter() {
     const pct = cap > 0 ? Math.min(100, (used / cap) * 100) : 0;
     fill.style.width = `${pct}%`;
     el.classList.toggle('over', used > cap);
-    text.textContent = `${formatBytes(used)} de ${formatBytes(cap)} (${pct.toFixed(1)} %) ${note}`;
+    text.textContent = `${formatBytes(used)} / ${formatBytes(cap)} (${pct.toFixed(1)} %) ${note}`;
   };
   return el;
 }
@@ -43,5 +44,6 @@ export function segmented(options, value, onChange) {
   const paint = (v) => [...el.children].forEach((b) => b.setAttribute('aria-selected', String(b.dataset.v === v)));
   options.forEach(([v, text]) => el.append(h('button', { type: 'button', role: 'tab', 'data-v': v, onClick: () => { paint(v); onChange(v); } }, text)));
   paint(value);
+  el.set = paint;
   return el;
 }

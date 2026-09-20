@@ -8,7 +8,7 @@ import path from 'node:path';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const OUT = path.join(ROOT, 'docs');
 const CHROME = process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
-const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8' };
+const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml' };
 
 const server = http.createServer((req, res) => {
   const p = path.join(ROOT, new URL(req.url, 'http://x').pathname.replace(/\/$/, '/index.html'));
@@ -34,6 +34,7 @@ const evaluate = async (expression) => {
 };
 
 await send('Page.enable');
+await send('Page.addScriptToEvaluateOnNewDocument', { source: "localStorage.setItem('umbra.lang', 'es')" });
 await send('Emulation.setDeviceMetricsOverride', { width: 960, height: 1200, deviceScaleFactor: 2, mobile: false });
 
 async function open(hash) {
@@ -96,5 +97,26 @@ await evaluate(`(async () => {
 })()`);
 await sleep(600);
 await shot('analizar.png', 'main');
+
+// 5. retos: construir el ejemplo y resolver el primer nivel como lo haria un jugador
+await evaluate(`location.hash = '#retos'`); await sleep(500);
+await evaluate(click('construir el reto', 'button.primary'));
+await sleep(6000);
+await shot('retos.png', 'main');
+await evaluate(`(async () => {
+  const blob = await (await fetch(document.querySelector('.levels-out img').src)).blob();
+  window.__reto = blob;
+})()`);
+await evaluate(`location.hash = '#revelar'`); await sleep(400);
+await evaluate(`(() => { const i = document.querySelector('.panel input[type=file]'); const dt = new DataTransfer(); dt.items.add(new File([window.__reto], 'umbra-reto.png', { type: 'image/png' })); i.files = dt.files; i.dispatchEvent(new Event('change', { bubbles: true })); })()`);
+await sleep(700);
+await evaluate(set('input[type=password]', 'primus'));
+await evaluate(click('revelar', 'button.primary'));
+await sleep(1500);
+await shot('resolver.png', 'main');
+
+// 6. cabecera con la cigarra, para el portafolio y el README
+await open('ocultar');
+await shot('cabecera.png', '.top');
 
 ws.close(); chrome.kill(); server.close();

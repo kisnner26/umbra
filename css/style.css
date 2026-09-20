@@ -5,7 +5,7 @@
   --ink: #e9e6df;
   --mid: #9a978f;
   --faint: #5b5a56;
-  --accent: #b9d4a3;
+  --accent: #5ee28a;
   --warn: #e0a15a;
   --bad: #e07a6a;
   --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -21,9 +21,16 @@ a { color: var(--accent); }
 
 .top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 28px; padding: 26px 0 18px; border-bottom: 1px solid var(--line); }
 .brand { display: flex; align-items: baseline; gap: 12px; text-decoration: none; color: var(--ink); }
+.brand { align-items: center; }
 .brand b { font: 400 1.7rem/1 var(--serif); letter-spacing: .28em; text-transform: lowercase; }
+.cicada { display: block; filter: drop-shadow(0 0 6px rgba(94, 226, 138, .35)); }
 .brand-runes { font-size: 1.4rem; color: var(--accent); letter-spacing: .12em; }
+.top-right { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
 .tabs { display: flex; gap: 4px; flex-wrap: wrap; }
+.lang { display: flex; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+.lang button { font: inherit; font-size: .78rem; background: none; border: 0; color: var(--mid); padding: 5px 9px; cursor: pointer; letter-spacing: .08em; }
+.lang button + button { border-left: 1px solid var(--line); }
+.lang button[aria-pressed="true"] { color: var(--ink); background: var(--panel); }
 .tabs a { padding: 6px 14px; color: var(--mid); text-decoration: none; border: 1px solid transparent; border-radius: 3px; }
 .tabs a:hover { color: var(--ink); }
 .tabs a[aria-current="true"] { color: var(--ink); border-color: var(--line); background: var(--panel); }
@@ -80,7 +87,7 @@ audio { width: 100%; margin: 10px 0; }
 table { border-collapse: collapse; width: 100%; margin: 10px 0; }
 th, td { text-align: left; padding: 6px 12px 6px 0; border-bottom: 1px solid var(--line); font-weight: 400; }
 th { color: var(--mid); }
-table.runes { max-width: 420px; }
+table.rune-table { max-width: 420px; }
 td.rune { font-size: 1.4rem; color: var(--accent); cursor: pointer; }
 .reading { color: var(--mid); padding-left: 1.1rem; }
 .meta, .gem { color: var(--mid); }
@@ -89,3 +96,16 @@ td.rune { font-size: 1.4rem; color: var(--accent); cursor: pointer; }
 footer { padding: 18px 0 30px; border-top: 1px solid var(--line); color: var(--faint); font-size: .82rem; }
 @media (max-width: 560px) { body { font-size: 14px; } .top { padding-top: 18px; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* retos encadenados */
+.levels { display: grid; gap: 14px; margin: 16px 0; }
+.level { border: 1px solid var(--line); border-radius: 4px; padding: 14px 16px 6px; background: var(--panel); }
+.level header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+.level header b { font: 400 1.15rem/1 var(--serif); }
+.level header small { margin: 0; flex: 1; }
+.level details { margin: 6px 0 12px; color: var(--mid); }
+.level summary { cursor: pointer; }
+.row-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 8px 0; }
+.levels-out { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin: 14px 0; }
+.levels-out img { width: 100%; height: auto; border: 1px solid var(--line); display: block; }
+.file { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 8px 0; color: var(--mid); }

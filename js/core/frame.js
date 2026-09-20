@@ -4,7 +4,7 @@ import { deflate, inflate } from './compress.js';
 import { seal, open } from './seal.js';
 import { UmbraError } from './errors.js';
 
-export const TYPE = { text: 0, file: 1 };
+export const TYPE = { text: 0, file: 1, bundle: 2 };
 const VERSION = 1;
 const MAGIC = enc.encode('UMB1');
 const FLAG_COMPRESSED = 1;
