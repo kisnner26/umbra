@@ -1,0 +1,10 @@
+{
+  "name": "umbra",
+  "version": "0.1.0",
+  "description": "Laboratorio modular de esteganografía en el navegador",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "license": "MIT"
+}

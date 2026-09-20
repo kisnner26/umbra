@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>umbra · esteganografía en tu navegador</title>
+<meta name="description" content="Esconde mensajes y archivos dentro de imágenes, audio y texto, con cifrado y posiciones repartidas por clave. Todo en tu navegador, sin servidor.">
+<meta name="color-scheme" content="dark">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<noscript>umbra necesita JavaScript: todo el procesamiento ocurre en tu navegador.</noscript>
+<div id="app"></div>
+<script type="module">
+  import { mount } from './js/ui/app.js';
+  mount(document.getElementById('app'));
+</script>
+</body>
+</html>
