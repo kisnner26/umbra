@@ -125,6 +125,7 @@ export const en = {
   'nivel abierto': 'level opened',
   'nivel {n}': 'level {n}',
   'no cabe: hacen falta {need} y el portador tiene {have}. Usa un portador mayor o un mensaje más corto.': 'does not fit: {need} needed and the carrier has {have}. Use a bigger carrier or a shorter message.',
+  'nombre de archivo corrupto': 'corrupt file name',
   'no es un archivo WAV': 'not a WAV file',
   'no hay más niveles dentro: es el final del reto.': 'there are no more levels inside: this is the end of the puzzle.',
   'no hay ningun mensaje (o necesita clave)': 'there is no message (or it needs a key)',

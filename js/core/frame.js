@@ -11,6 +11,7 @@ const FLAG_COMPRESSED = 1;
 
 /** carga util: tipo, nombre (solo archivos) y datos. Comprime solo si de verdad ahorra bytes. */
 export async function packPayload({ type, name = '', data }) {
+  if (!Object.values(TYPE).includes(type)) throw new UmbraError('format', 'formato desconocido');
   const nameBytes = enc.encode(name);
   if (nameBytes.length > 255) throw new UmbraError('format', 'el nombre del archivo es demasiado largo');
   let body = data, flags = 0;
@@ -22,8 +23,11 @@ export async function packPayload({ type, name = '', data }) {
 export async function unpackPayload(inner) {
   if (inner.length < 4 || inner[0] !== VERSION) throw new UmbraError('format', 'formato desconocido');
   const [, flags, type, nameLen] = inner;
+  if ((flags & ~FLAG_COMPRESSED) || !Object.values(TYPE).includes(type)) throw new UmbraError('format', 'formato desconocido');
   if (inner.length < 4 + nameLen) throw new UmbraError('format', 'cabecera truncada');
-  const name = dec.decode(inner.slice(4, 4 + nameLen));
+  let name;
+  try { name = dec.decode(inner.slice(4, 4 + nameLen)); }
+  catch { throw new UmbraError('format', 'nombre de archivo corrupto'); }
   let data = inner.slice(4 + nameLen);
   if (flags & FLAG_COMPRESSED) {
     try { data = await inflate(data); } catch { throw new UmbraError('format', 'datos comprimidos corruptos'); }
