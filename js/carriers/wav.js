@@ -5,14 +5,20 @@ export function parseWav(bytes) {
   const v = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
   const tag = (o) => String.fromCharCode(bytes[o], bytes[o + 1], bytes[o + 2], bytes[o + 3]);
   if (bytes.length < 44 || tag(0) !== 'RIFF' || tag(8) !== 'WAVE') throw new UmbraError('format', 'no es un archivo WAV');
+  const limit = v.getUint32(4, true) + 8;
+  if (limit < 12 || limit > bytes.length) throw new UmbraError('format', 'el WAV está truncado');
   let o = 12, fmt = null;
-  while (o + 8 <= bytes.length) {
+  while (o + 8 <= limit) {
     const size = v.getUint32(o + 4, true);
-    if (tag(o) === 'fmt ') fmt = { format: v.getUint16(o + 8, true), bits: v.getUint16(o + 22, true) };
+    if (o + 8 + size + (size & 1) > limit) throw new UmbraError('format', 'el bloque WAV está truncado');
+    if (tag(o) === 'fmt ') {
+      if (size < 16) throw new UmbraError('format', 'el bloque fmt del WAV está truncado');
+      fmt = { format: v.getUint16(o + 8, true), bits: v.getUint16(o + 22, true) };
+    }
     if (tag(o) === 'data') {
       if (!fmt || fmt.format !== 1 || fmt.bits !== 16) throw new UmbraError('format', 'solo se admite WAV PCM de 16 bits');
       const start = o + 8;
-      return { start, end: Math.min(bytes.length, start + size) };
+      return { start, end: start + size };
     }
     o += 8 + size + (size & 1);
   }
